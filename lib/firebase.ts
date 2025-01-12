@@ -1,9 +1,8 @@
-import firebase from "firebase/app";
-import ganalytics from "firebase/analytics";
-import { getAuth } from "firebase/auth";
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { get } from "firebase/database";
 
 const config = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,13 +13,26 @@ const config = {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-if (!firebase.getApps().length) {
-    firebase.initializeApp(config);
+if (!getApps().length) {
+    initializeApp(config);
 }
 
-const app = firebase.getApp();
+export const app = getApp();
+const googleAuthProvider = new GoogleAuthProvider();
 
-export const analytics = ganalytics.getAnalytics(app);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
 export const storage = getStorage(app);
+
+export const signInWithGoogle = async () => {
+  return signInWithPopup(auth, googleAuthProvider);
+};
+
+export const signInWithEmail = async (email: string, password: string) => {
+  return signInWithEmailAndPassword(auth, email, password);
+};
+
+export const getAnalyticsInstance = () => {
+    return getAnalytics(app);
+};
+
