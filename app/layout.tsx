@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
-import AuthContextProvider from "@/providers/AuthContextProvider";
+import FirebaseAuthContextProvider from "@/providers/AuthContextProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,10 +18,10 @@ export default function RootLayout({
       <body
         className={`antialiased`}
       >
-        <AuthContextProvider>
+        <FirebaseAuthContextProvider>
           <Navbar />
           {children}
-        </AuthContextProvider>
+        </FirebaseAuthContextProvider>
       </body>
     </html>
   );

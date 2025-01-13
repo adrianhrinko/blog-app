@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut, signInAnonymously, createUserWithEmailAndPassword} from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -36,3 +36,14 @@ export const getAnalyticsInstance = () => {
     return getAnalytics(app);
 };
 
+export const signOutUser = () => {
+    return signOut(auth);
+};
+
+export const anonymousSignIn = () => {
+    return signInAnonymously(auth);
+};
+
+export const signUpWithEmail = async (email: string, password: string) => {
+  return createUserWithEmailAndPassword(auth, email, password);
+};

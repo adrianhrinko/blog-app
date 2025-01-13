@@ -1,7 +1,6 @@
 "use client"
-import { signInWithGoogle } from '@/lib/firebase';
+import { anonymousSignIn, signInWithEmail, signInWithGoogle } from '@/lib/firebase';
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -11,27 +10,44 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import ButtonWLoader from './ButtonWLoader';
+import { useState } from 'react';
+import Link from 'next/link';
 
 export default function SignInForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    
+    e.preventDefault()  
+    setLoading(true);
+
     const formData = new FormData(e.currentTarget)
     const email = formData.get('email') as string
     const password = formData.get('password') as string
     
     try {
-      const auth = getAuth()
-      await signInWithEmailAndPassword(auth, email, password)
+      await signInWithEmail(email, password)
       // Successful login will automatically redirect via Firebase Auth
     } catch (err: any) {
       console.error(err.message)
       // Handle error appropriately
     }
+    setLoading(false);
+  }
+  
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    await signInWithGoogle();
+    setLoading(false);
+  }
+
+  const handleAnonymousSignIn = async () => {
+    setLoading(true);
+    await anonymousSignIn();
+    setLoading(false);
   }
 
   return (
@@ -73,21 +89,21 @@ export default function SignInForm({
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <ButtonWLoader loading={loading} type="submit" className="w-full">
                 Sign in
-              </Button>
-              <Button onClick={() => signInWithGoogle()} variant="outline" className="w-full">
+              </ButtonWLoader>
+              <ButtonWLoader loading={loading} onClick={() => {signInWithGoogle(); setLoading(true)}} variant="outline" className="w-full">
                 Sign in with Google
-              </Button>
-              <Button onClick={() => signInWithGoogle()} variant="outline" className="w-full">
+              </ButtonWLoader>
+              <ButtonWLoader loading={loading} onClick={() => {anonymousSignIn(); setLoading(true)}} variant="outline" className="w-full">
                 Sign in anonymously
-              </Button>
+              </ButtonWLoader>
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
+              <Link href="/signup" className="underline underline-offset-4">
                 Sign up
-              </a>
+              </Link>
             </div>
           </form>
         </CardContent>

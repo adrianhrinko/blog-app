@@ -9,7 +9,6 @@ export default function Navbar({ }) {
                     <div className="font-mono text-2xl font-black bg-black text-white px-3 py-1 rounded">FEED</div>
                 </div>
             </Link>
-
             <NavbarActions />
         </nav>
     )

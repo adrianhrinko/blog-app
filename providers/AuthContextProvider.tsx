@@ -1,25 +1,25 @@
 "use client"
 
 import { auth, firestore } from '@/lib/firebase';
+import { User } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 interface AuthContextType {
-    user: any | null;
+    user: User | null;
     username: string | null;
 }
 
 const AuthContext = createContext<AuthContextType>({ user: null, username: null })
 
 export const useAuth = () => useContext(AuthContext);
-export const signOut = () => auth.signOut();
 
-export default function AuthContextProvider({ children }: 
+export default function FirebaseAuthContextProvider({ children }: 
   { children:  React.ReactNode }) {
     const [user] = useAuthState(auth);
     const [username, setUsername] = useState(null);
-    
+
     useEffect(() => {
       console.log("user", user);
       let unsubscribe = () => {};
