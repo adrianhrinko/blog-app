@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { Spinner } from "./Spinner"
-import { ButtonHTMLAttributes } from "react"
 
 interface ButtonLoaderProps extends React.ComponentProps<typeof Button> {
   loading?: boolean

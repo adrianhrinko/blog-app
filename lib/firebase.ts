@@ -3,6 +3,9 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPasswor
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getDocs, limit } from "firebase/firestore";
+import { query, where } from "firebase/firestore";
+import { collection } from "firebase/firestore";
 
 const config = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -47,3 +50,30 @@ export const anonymousSignIn = () => {
 export const signUpWithEmail = async (email: string, password: string) => {
   return createUserWithEmailAndPassword(auth, email, password);
 };
+
+/**`
+ * Gets a users/{uid} document with username
+ * @param  {string} username
+ */
+export async function getUserWithUsername(username: string) {
+  const usersRef = collection(firestore, 'users');
+  const q = query(usersRef, where('username', '==', username), limit(1));
+  const querySnapshot = await getDocs(q);
+  const userDoc = querySnapshot.docs[0];
+  return userDoc;
+}
+
+/**`
+ * Converts a firestore document to JSON
+ * @param  {DocumentSnapshot} doc
+ */
+export function postToJSON(doc: any) {
+  const data = doc.data();
+  return {
+    ...data,
+    // Firestore timestamp is NOT serializable to JSON. Must be convert to milliseconds
+    createdAt: data.createdAt.toMillis(),
+    updatedAt: data.updatedAt.toMillis(),
+  };
+}
+

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { signOutUser } from "@/lib/firebase";
 import { LogOutIcon, PencilIcon, UserIcon } from "lucide-react";
+import AvatarComponent from "../Avatar";
 
 export default function Page({ }) {
     const { user, username } = useAuth();
@@ -20,7 +21,7 @@ export default function Page({ }) {
   return (
     <div className="flex flex-row ml-auto gap-4"> {/* ml-auto pushes items to the right */}
         {/* user is signed-in and has username */}
-        {username && (
+        {user && username && (
         <>
             <Link href="/admin">
                 <Button>
@@ -30,16 +31,7 @@ export default function Page({ }) {
             </Link>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Avatar className="cursor-pointer">
-                        <AvatarImage src={user?.photoURL ?? undefined} alt={username} />
-                        <AvatarFallback>
-                            <img 
-                                src="/defaultAvatar.svg" 
-                                alt="Default Avatar" 
-                                className="h-full w-full"
-                            />
-                        </AvatarFallback>
-                    </Avatar>
+                    <AvatarComponent user={user} username={username} />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>@{username}</DropdownMenuLabel>
