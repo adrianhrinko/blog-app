@@ -1,7 +1,6 @@
 "use client"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useAuth } from "@/providers/AuthContextProvider";
 import {
     DropdownMenu,
@@ -30,8 +29,8 @@ export default function Page({ }) {
                 </Button>
             </Link>
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <AvatarComponent user={user} username={username} />
+                <DropdownMenuTrigger>
+                    <AvatarComponent user={user} username={username}/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>@{username}</DropdownMenuLabel>
