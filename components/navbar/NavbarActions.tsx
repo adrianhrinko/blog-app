@@ -7,10 +7,12 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { signOutUser } from "@/lib/firebase";
+import { LogOutIcon, PencilIcon, UserIcon } from "lucide-react";
 
 export default function Page({ }) {
     const { user, username } = useAuth();
@@ -21,7 +23,10 @@ export default function Page({ }) {
         {username && (
         <>
             <Link href="/admin">
-                <Button>Write Posts</Button>
+                <Button>
+                    <PencilIcon />
+                    Write Posts
+                </Button>
             </Link>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -37,12 +42,18 @@ export default function Page({ }) {
                     </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>@{username}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                        <Link href={`/${username}`}>Profile</Link>
+                        <Link href={`/${username}`} className="flex items-center gap-2">
+                            <UserIcon className="h-4 w-4" />
+                            Profile
+                        </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => signOutUser()}>
-                        Logout
+                    <DropdownMenuItem onClick={() => signOutUser()} className="flex items-center gap-2">
+                        <LogOutIcon className="h-4 w-4" />
+                        Sign out
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -51,7 +62,7 @@ export default function Page({ }) {
 
         {/* user is not signed OR has not created username */}
         {!username && (
-            <Link href="/signin">
+            <Link href="/auth/signin">
                 <Button variant="default">Sign in</Button>
             </Link>
         )}

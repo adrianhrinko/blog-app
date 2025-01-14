@@ -10,13 +10,12 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Spinner } from "@/components/Spinner"
 import { firestore } from '@/lib/firebase';
 import { doc, getDoc, writeBatch } from 'firebase/firestore';
 import { debounce } from 'lodash';
 import { useAuth } from '@/providers/AuthContextProvider';
 import { Button } from "@/components/ui/button"
-
+import { Spinner } from '@/components/Spinner';
 export default function UsernameForm({
   className,
   ...props

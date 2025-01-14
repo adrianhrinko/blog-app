@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import ButtonWLoader from './ButtonWLoader';
+import ButtonWLoader from '../ButtonWLoader';
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -92,10 +92,10 @@ export default function SignInForm({
               <ButtonWLoader loading={loading} type="submit" className="w-full">
                 Sign in
               </ButtonWLoader>
-              <ButtonWLoader loading={loading} onClick={() => {signInWithGoogle(); setLoading(true)}} variant="outline" className="w-full">
+              <ButtonWLoader loading={loading} onClick={handleGoogleSignIn} variant="outline" className="w-full">
                 Sign in with Google
               </ButtonWLoader>
-              <ButtonWLoader loading={loading} onClick={() => {anonymousSignIn(); setLoading(true)}} variant="outline" className="w-full">
+              <ButtonWLoader loading={loading} onClick={handleAnonymousSignIn} variant="outline" className="w-full">
                 Sign in anonymously
               </ButtonWLoader>
             </div>
