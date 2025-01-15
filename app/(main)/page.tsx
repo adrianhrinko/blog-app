@@ -10,7 +10,7 @@ export const metadata: Metadata = generateMetadata({
 })
 
 // Max post to query per page
-const LIMIT = 1;
+const LIMIT = 5;
 
 // Server-side posts fetching
 async function getPostsAsync() {
@@ -27,6 +27,7 @@ async function getPostsAsync() {
 // Server Component
 export default async function HomePage() {
   const posts = await getPostsAsync();
-  
+
+  console.log(posts);
   return <ClientPosts initialPosts={posts} />;
 }

@@ -10,37 +10,40 @@ function PostItem({ post, admin = false } : { post: any, admin: any }) {
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
 
   return (
-    <div className="card">
-      <Link href={`/${post.username}`}>
-        <a>
-          <strong>By @{post.username}</strong>
-        </a>
-      </Link>
+    <div className="flex flex-col gap-4 p-6 mb-4 bg-card text-card-foreground rounded-lg border shadow-sm">
+      <div className="flex items-center gap-2">
+        <Link href={`/${post.username}`} className="text-sm font-medium hover:underline">
+          @{post.username}
+        </Link>
+      </div>
 
-      <Link href={`/${post.username}/${post.slug}`}>
-        <h2>
-          <a>{post.title}</a>
+      <Link href={`/${post.username}/${post.slug}`} className="group">
+        <h2 className="text-2xl font-bold group-hover:underline">
+          {post.title}
         </h2>
       </Link>
 
-      <footer>
+      <div className="flex items-center justify-between text-sm text-muted-foreground">
         <span>
-          {wordCount} words. {minutesToRead} min read
+          {wordCount} words · {minutesToRead} min read
         </span>
-        <span className="push-left">💗 {post.heartCount || 0} Hearts</span>
-      </footer>
+        <span className="flex items-center gap-1">
+          <span>💗</span> {post.heartCount || 0}
+        </span>
+      </div>
 
-      {/* If admin view, show extra controls for user */}
       {admin && (
-        <>
+        <div className="flex items-center justify-between mt-2 pt-4 border-t">
           <Link href={`/admin/${post.slug}`}>
-            <h3>
-              <button className="btn-blue">Edit</button>
-            </h3>
+            <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+              Edit
+            </button>
           </Link>
 
-          {post.published ? <p className="text-success">Live</p> : <p className="text-danger">Unpublished</p>}
-        </>
+          <span className={post.published ? "text-green-500" : "text-red-500"}>
+            {post.published ? "Live" : "Unpublished"}
+          </span>
+        </div>
       )}
     </div>
   );

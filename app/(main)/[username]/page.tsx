@@ -11,8 +11,7 @@ import generateMetadata from "@/lib/metatags";
 import { Metadata } from "next";
 
 export const metadata: Metadata = generateMetadata({
-  title: "Home | FEED",
-  description: "Share your thoughts or knowledge with the world"
+  title: "Profile | FEED",
 })
 
 async function getData(username: string) {
