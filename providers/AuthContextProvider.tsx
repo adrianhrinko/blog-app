@@ -37,7 +37,7 @@ export default function FirebaseAuthContextProvider({ children }:
     }, [user]);
     
   return (
-    <AuthContext.Provider value={{ user: user, username: username }}>
+    <AuthContext.Provider value={{ user: user || null, username: username }}>
       {children}
     </AuthContext.Provider>
   );

@@ -6,24 +6,31 @@ import { getDocs, query } from "firebase/firestore";
 import { limit, orderBy } from "firebase/firestore";
 import { getUserWithUsername } from "@/lib/firebase";
 import { collection, where } from "firebase/firestore";
+import { notFound } from "next/navigation";
+import generateMetadata from "@/lib/metatags";
+import { Metadata } from "next";
+
+export const metadata: Metadata = generateMetadata({
+  title: "Home | FEED",
+  description: "Share your thoughts or knowledge with the world"
+})
 
 async function getData(username: string) {
   const userDoc = await getUserWithUsername(username);
 
-  let user = null;
-  let posts = null;
-
-  if (userDoc) {
-    user = userDoc.data();
-    const postsQuery = query(
-      collection(firestore, 'users', userDoc.id, 'posts'),
-      where('published', '==', true),
-      orderBy('createdAt', 'desc'),
-      limit(5)
-    );
-    const querySnapshot = await getDocs(postsQuery);
-    posts = querySnapshot.docs.map(postToJSON);
+  if (!userDoc) {
+    notFound();
   }
+
+  const user = userDoc.data();
+  const postsQuery = query(
+    collection(firestore, 'users', userDoc.id, 'posts'),
+    where('published', '==', true),
+    orderBy('createdAt', 'desc'),
+    limit(5)
+  );
+  const querySnapshot = await getDocs(postsQuery);
+  const posts = querySnapshot.docs.map(postToJSON);
 
   return { user, posts };
 }
