@@ -38,14 +38,13 @@ export default function ClientPosts({ initialPosts }: { initialPosts: any[] }) {
   };
 
   return (
-    <main>
+    <main className="max-w-4xl mx-auto p-4">
       <PostFeed posts={posts} admin={false} />
 
-      {!loading && !postsEnd && <button onClick={getMorePosts}>Load more</button>}
-
-      <Spinner show={loading} />
-
-      {postsEnd && 'You have reached the end!'}
+      <div className="flex justify-center py-8">
+        {loading && <Spinner show={loading} />}
+        {postsEnd && <p className="text-gray-500">You have reached the end!</p>}
+      </div>
     </main>
   );
 } 

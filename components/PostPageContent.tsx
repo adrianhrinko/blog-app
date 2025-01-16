@@ -33,22 +33,10 @@ export default function PostPageContent({
     const post = (realtimePost as Post) || initialPost;
   
     return (
-      <main className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 p-4">
-        <section className="md:col-span-2">
+      <main className="max-w-2xl mx-auto p-4">
+        <section>
           <PostContent post={post} />
         </section>
-  
-        <Card className="p-4 h-fit">
-          <p className="font-bold mb-4">
-            {post.heartCount || 0} 🤍
-          </p>
-  
-          {user?.uid === post.uid && (
-            <Link href={`/admin/${post.slug}`}>
-              <Button variant="default">Edit Post</Button>
-            </Link>
-          )}
-        </Card>
       </main>
     );
   }
