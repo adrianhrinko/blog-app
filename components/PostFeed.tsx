@@ -1,12 +1,22 @@
 import Link from 'next/link';
 import AvatarComponent from './Avatar';
-import { HeartIcon } from 'lucide-react';
+import { HeartIcon, Trash2Icon, PencilIcon } from 'lucide-react';
 
-export default function PostFeed({ posts, owner, showAuthor = true } : { posts: any, owner: any, showAuthor?: boolean }) {
-  return posts ? posts.map((post: any) => <PostItem post={post} key={post.slug} owner={owner} showAuthor={showAuthor} />) : null;
+export default function PostFeed({ posts, owner, showAuthor = true} : { posts: any, owner: any, showAuthor?: boolean }) {
+  const handleDelete = async (slug: string) => {
+    const confirm = window.confirm('Are you sure you want to delete this post?');
+    if (confirm) {
+      try {
+        console.log(`Delete post: ${slug}`);
+      } catch (error) {
+        console.error('Failed to delete post:', error);
+      }
+    }
+  };
+  return posts ? posts.map((post: any) => <PostItem post={post} key={post.slug} owner={owner} showAuthor={showAuthor} handleDelete={handleDelete} />) : null;
 }
 
-function PostItem({ post, owner: owner = false, showAuthor } : { post: any, owner: any, showAuthor: boolean }) {
+function PostItem({ post, owner: owner = false, showAuthor, handleDelete } : { post: any, owner: any, showAuthor: boolean, handleDelete: (slug: string) => void  }) {
 
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
@@ -16,7 +26,11 @@ function PostItem({ post, owner: owner = false, showAuthor } : { post: any, owne
       <article className="flex gap-6 py-6 border-b border-gray-100 hover:bg-gray-50">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            {showAuthor && !owner && (
+            {owner ? (
+              <span className={post.published ? "text-green-500" : "text-red-500"}>
+                {post.published ? "Live" : "Unpublished"}
+              </span>
+            ) : showAuthor && (
               <>
                 <Link href={`/${post.username}`}>
                   <AvatarComponent user={post.user} username={post.username} className="h-6 w-6" />
@@ -47,13 +61,18 @@ function PostItem({ post, owner: owner = false, showAuthor } : { post: any, owne
             {owner && (
               <div className="flex items-center gap-3">
                 <Link href={`/manage/${post.slug}`} onClick={(e) => e.stopPropagation()}>
-                  <button className="text-sm text-primary hover:underline">
+                  <button className="text-sm flex items-center gap-1 hover:underline">
+                    <PencilIcon className="h-4 w-4" />
                     Edit
                   </button>
                 </Link>
-                <span className={post.published ? "text-green-500" : "text-red-500"}>
-                  {post.published ? "Live" : "Unpublished"}
-                </span>
+                <button 
+                  onClick={() =>  handleDelete(post.slug)}
+                  className="text-sm text-red-500 flex items-center gap-1 hover:underline"
+                >
+                  <Trash2Icon className="h-4 w-4" />
+                  Delete
+                </button>
               </div>
             )}
           </div>
