@@ -2,11 +2,11 @@ import Link from 'next/link';
 import AvatarComponent from './Avatar';
 import { HeartIcon } from 'lucide-react';
 
-export default function PostFeed({ posts, owner } : { posts: any, owner: any }) {
-  return posts ? posts.map((post: any) => <PostItem post={post} key={post.slug} owner={owner} />) : null;
+export default function PostFeed({ posts, owner, showAuthor = true } : { posts: any, owner: any, showAuthor?: boolean }) {
+  return posts ? posts.map((post: any) => <PostItem post={post} key={post.slug} owner={owner} showAuthor={showAuthor} />) : null;
 }
 
-function PostItem({ post, owner: owner = false } : { post: any, owner: any }) {
+function PostItem({ post, owner: owner = false, showAuthor } : { post: any, owner: any, showAuthor: boolean }) {
 
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
@@ -16,17 +16,20 @@ function PostItem({ post, owner: owner = false } : { post: any, owner: any }) {
       <article className="flex gap-6 py-6 border-b border-gray-100 hover:bg-gray-50">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <Link href={`/${post.username}`}>
-              <AvatarComponent user={post.user} username={post.username} className="h-6 w-6" />
-            </Link>
-            <Link href={`/${post.username}`}>
-              <span className="text-sm font-medium">
-                <span className="text-muted-foreground">by</span>{' '}
-                <span className="hover:underline">@{post.username}</span>
-              </span>
-            </Link>
-            <span className="text-sm text-muted-foreground">·</span>
-            <span className="text-sm text-muted-foreground">{minutesToRead} min read</span>
+            {showAuthor && !owner && (
+              <>
+                <Link href={`/${post.username}`}>
+                  <AvatarComponent user={post.user} username={post.username} className="h-6 w-6" />
+                </Link>
+                <Link href={`/${post.username}`}>
+                  <span className="text-sm font-medium">
+                    <span className="text-muted-foreground">by</span>{' '}
+                    <span className="hover:underline">@{post.username}</span>
+                  </span>
+                </Link>
+                <span className="text-sm text-muted-foreground">·</span>
+              </>
+            )}
           </div>
 
           <h2 className="text-xl font-bold mb-2 line-clamp-2">
@@ -38,7 +41,7 @@ function PostItem({ post, owner: owner = false } : { post: any, owner: any }) {
               <span className="flex items-center gap-1 text-muted-foreground">
                 <HeartIcon className="h-4 w-4" /> {post.heartCount || 0}
               </span>
-              <span className="text-muted-foreground">{wordCount} words</span>
+              <span className="text-muted-foreground">{wordCount} words · {minutesToRead} min read</span>
             </div>
 
             {owner && (
