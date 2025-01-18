@@ -11,7 +11,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { signOutUser } from "@/lib/firebase";
-import { LogOutIcon, PencilIcon, UserIcon } from "lucide-react";
+import { FileTextIcon, LogOutIcon, PencilIcon, UserIcon } from "lucide-react";
 import AvatarComponent from "../Avatar";
 
 export default function Page({ }) {
@@ -22,10 +22,10 @@ export default function Page({ }) {
         {/* user is signed-in and has username */}
         {user && username && (
         <>
-            <Link href="/admin">
+            <Link href="/manage/new-post">
                 <Button>
                     <PencilIcon />
-                    Write Posts
+                    Write Post
                 </Button>
             </Link>
             <DropdownMenu>
@@ -39,6 +39,12 @@ export default function Page({ }) {
                         <Link href={`/${username}`} className="flex items-center gap-2">
                             <UserIcon className="h-4 w-4" />
                             Profile
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/manage" className="flex items-center gap-2">
+                            <FileTextIcon className="h-4 w-4" />
+                            Manage Posts
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />

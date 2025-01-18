@@ -43,9 +43,9 @@ export default async function UserPage({
   const { user, posts } = await getData(username);
 
   return (
-    <div>
+    <main className="max-w-4xl mx-auto p-4">
       <UserProfile user={user} />
-      <PostFeed posts={posts} admin={false}/>  
-    </div>
+      <PostFeed posts={posts} owner={false}/>  
+    </main>
   );
 }

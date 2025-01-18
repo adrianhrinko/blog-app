@@ -1,10 +1,10 @@
 import { useState, ChangeEvent } from 'react';
 import { auth, storage } from '../lib/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Label } from '@/components/ui/label';
+import { CopyIcon } from 'lucide-react';
 
 // Uploads images to Firebase Storage
 export default function ImageUploader() {
@@ -51,36 +51,60 @@ export default function ImageUploader() {
   };
 
   return (
-    <Card className="p-4">
+    <div className="space-y-2">
       {uploading && (
-        <div className="flex flex-col items-center gap-2">
-          <Progress value={progress} className="w-full" />
-          <p className="text-sm text-muted-foreground">{progress}% uploaded</p>
+        <div className="space-y-2">
+          <Progress value={progress} className="w-full h-1" />
+          <p className="text-xs text-muted-foreground text-center">{progress}%</p>
         </div>
       )}
 
       {!uploading && (
-        <div>
-          <Button asChild variant="secondary" className="w-full">
-            <Label htmlFor="image-upload" className="cursor-pointer">
-              📸 Upload Image
-              <input
-                id="image-upload"
-                type="file"
-                onChange={uploadFile}
-                accept="image/x-png,image/gif,image/jpeg"
-                className="hidden"
+        <Button 
+          asChild 
+          variant="secondary"
+          className="w-full"
+        >
+          <Label htmlFor="image-upload" className="cursor-pointer flex items-center justify-center gap-2">
+            <svg 
+              className="w-4 h-4" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
-            </Label>
-          </Button>
-        </div>
+            </svg>
+            Upload Image
+            <input
+              id="image-upload"
+              type="file"
+              onChange={uploadFile}
+              accept="image/x-png,image/gif,image/jpeg"
+              className="hidden"
+            />
+          </Label>
+        </Button>
       )}
 
       {downloadURL && (
-        <code className="mt-4 w-full">
-          {`![alt](${downloadURL})`}
-        </code>
+        <div className="flex bg-gray-50 rounded">
+          <button
+            onClick={() => navigator.clipboard.writeText(`![alt](${downloadURL})`)}
+            title="Copy to clipboard"
+            className=" text-gray-600 hover:text-gray-800 transition-colors duration-200 hover:bg-gray-100 p-4 rounded flex items-center justify-center"
+          >
+            <CopyIcon className="w-4 h-4" />
+          </button>
+          <div className="text-sm font-mono text-gray-600 break-all py-2 pr-2">
+            {`![alt](${downloadURL})`}
+          </div>
+        </div>
       )}
-    </Card>
+    </div>
   );
 }

@@ -2,11 +2,11 @@ import Link from 'next/link';
 import AvatarComponent from './Avatar';
 import { HeartIcon } from 'lucide-react';
 
-export default function PostFeed({ posts, admin } : { posts: any, admin: any }) {
-  return posts ? posts.map((post: any) => <PostItem post={post} key={post.slug} admin={admin} />) : null;
+export default function PostFeed({ posts, owner } : { posts: any, owner: any }) {
+  return posts ? posts.map((post: any) => <PostItem post={post} key={post.slug} owner={owner} />) : null;
 }
 
-function PostItem({ post, admin = false } : { post: any, admin: any }) {
+function PostItem({ post, owner: owner = false } : { post: any, owner: any }) {
 
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
@@ -41,9 +41,9 @@ function PostItem({ post, admin = false } : { post: any, admin: any }) {
               <span className="text-muted-foreground">{wordCount} words</span>
             </div>
 
-            {admin && (
+            {owner && (
               <div className="flex items-center gap-3">
-                <Link href={`/admin/${post.slug}`} onClick={(e) => e.stopPropagation()}>
+                <Link href={`/manage/${post.slug}`} onClick={(e) => e.stopPropagation()}>
                   <button className="text-sm text-primary hover:underline">
                     Edit
                   </button>

@@ -39,7 +39,7 @@ export default function ClientPosts({ initialPosts }: { initialPosts: any[] }) {
 
   return (
     <main className="max-w-4xl mx-auto p-4">
-      <PostFeed posts={posts} admin={false} />
+      <PostFeed posts={posts} owner={false} />
 
       <div className="flex justify-center py-8">
         {loading && <Spinner show={loading} />}

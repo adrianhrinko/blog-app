@@ -5,9 +5,6 @@ import { useAuth } from "@/providers/AuthContextProvider";
 import { doc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import PostContent from "./PostContent";
-import { Card } from "./ui/card";
-import { Link } from "lucide-react";
-import { Button } from "./ui/button";
 
 interface Post {
     slug: string;
@@ -28,15 +25,12 @@ export default function PostPageContent({
   }) {
     const postRef = doc(firestore, path);
     const [realtimePost] = useDocumentData(postRef);
-    const { user } = useAuth();
   
     const post = (realtimePost as Post) || initialPost;
   
     return (
       <main className="max-w-2xl mx-auto p-4">
-        <section>
           <PostContent post={post} />
-        </section>
       </main>
     );
   }
