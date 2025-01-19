@@ -3,8 +3,6 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
-import { User } from "firebase/auth";
-import { cn } from "@/lib/utils";
 
 
 export default function AvatarComponent({ photoUrl, username, className }: { photoUrl?: string, username: string, className?: string }) {

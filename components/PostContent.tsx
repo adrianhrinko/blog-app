@@ -2,7 +2,8 @@ import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import AvatarComponent from './Avatar';
 import { User } from 'firebase/auth';
-import { HeartIcon } from 'lucide-react';
+import rehypeRaw from 'rehype-raw';
+import HeartComponent from './Heart';
 
 interface Post {
   title?: string;
@@ -15,7 +16,7 @@ interface Post {
 }
 
 // UI component for main post content
-export default function PostContent({ post, preview = false }: { post: any, preview?: boolean }) {
+export default function PostContent({ post, preview = false, path }: { post: any, preview?: boolean, path: string }) {
   const createdAt = typeof post?.createdAt === 'number' ? new Date(post.createdAt) : post.createdAt?.toDate();
 
   return (
@@ -45,17 +46,16 @@ export default function PostContent({ post, preview = false }: { post: any, prev
           </div>
           <div className="border-y border-gray-100 py-4">
             <div className="flex items-center gap-4">
-              <button className="flex items-center gap-1.5 text-muted-foreground hover:text-black transition-colors">
-                <HeartIcon className="h-5 w-5" />
-                <span className="text-sm font-medium">{post.heartCount || 0}</span>
-              </button>
+              {path && post?.heartCount !== undefined && (
+                <HeartComponent postPath={path} heartCount={post.heartCount} />
+              )}
             </div>
           </div>
         </>
       )}
       
       <div className="prose prose-lg max-w-none">
-        <ReactMarkdown>{post?.content}</ReactMarkdown>
+        <ReactMarkdown rehypePlugins={[rehypeRaw]} className="prose">{post?.content}</ReactMarkdown>
       </div>
     </article>
   );
