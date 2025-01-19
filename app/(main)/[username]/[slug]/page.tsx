@@ -46,7 +46,7 @@ export default async function PostPage({
 }: { 
   params: { username: string; slug: string } 
 }) {
-  const { username, slug } = params;
+  const { username, slug } = await params;
   const { post: initialPost, path } = await getData(username, slug);
   
   return <PostPageContent initialPost={initialPost} path={path} />;

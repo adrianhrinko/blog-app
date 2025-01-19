@@ -191,8 +191,13 @@ function PostEditor({ register, errors }: PostEditorProps) {
                 minLength: { value: 10, message: 'Content is too short' },
                 required: { value: true, message: 'Content is required' }
               })}
-              className="mx-auto bg-white shadow-none border-0 focus:ring-0 focus:border-0 focus-visible:ring-0 focus-visible:outline-none text-l p-0 placeholder:text-muted-foreground/50 resize-none"
+              className="mx-auto bg-white shadow-none border-0 focus:ring-0 focus:border-0 focus-visible:ring-0 focus-visible:outline-none text-l p-0 pb-8 placeholder:text-muted-foreground/50 min-h-[200px] overflow-hidden"
               placeholder="Tell your story..."
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = 'auto';
+                target.style.height = target.scrollHeight + 'px';
+              }}
             />
             {errors.content && <p className="text-red-500 text-center">{errors.content.message}</p>}
             <input type="hidden" {...register('published')} />

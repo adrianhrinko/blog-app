@@ -1,18 +1,28 @@
 'use client';
 
 import { firestore } from '@/lib/firebase';
-import { doc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { useParams, notFound } from 'next/navigation';
-import { useDocument } from 'react-firebase-hooks/firestore';
 import { useAuth } from '@/providers/AuthContextProvider';
 import PostManager from '@/components/PostManager';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 export default function ManagePostEdit() {
   const { slug } = useParams();
   const { user } = useAuth();
+  const [post, setPost] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const postRef = doc(firestore, 'users', user?.uid || 'dummy', 'posts', slug as string);
-  const [snapshot, loading] = useDocument(postRef);
-  const post = snapshot?.data();
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      const snapshot = await getDoc(postRef);
+      setPost(snapshot.data());
+      setLoading(false);
+    };
+    fetchPost();
+  }, [postRef]);
 
   if (!loading && !post) {
     notFound();

@@ -2,24 +2,14 @@ import Link from 'next/link';
 import AvatarComponent from './Avatar';
 import { HeartIcon, Trash2Icon, PencilIcon } from 'lucide-react';
 
-export default function PostFeed({ posts, owner, showAuthor = true} : { posts: any, owner: any, showAuthor?: boolean }) {
-  const handleDelete = async (slug: string) => {
-    const confirm = window.confirm('Are you sure you want to delete this post?');
-    if (confirm) {
-      try {
-        console.log(`Delete post: ${slug}`);
-      } catch (error) {
-        console.error('Failed to delete post:', error);
-      }
-    }
-  };
+export default function PostFeed({ posts, owner, showAuthor = true, handleDelete } : { posts: any, owner: any, showAuthor?: boolean, handleDelete?: (slug: string) => void }) {
 
   return posts ? posts.map((post: any) => (
     <PostItem post={post} key={post.slug} owner={owner} showAuthor={showAuthor} handleDelete={handleDelete} />
   )) : null;
   }
 
-function PostItem({ post, owner: owner = false, showAuthor, handleDelete } : { post: any, owner: any, showAuthor: boolean, handleDelete: (slug: string) => void  }) {
+function PostItem({ post, owner: owner = false, showAuthor, handleDelete } : { post: any, owner: any, showAuthor: boolean, handleDelete?: (slug: string) => void  }) {
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
 
@@ -71,8 +61,7 @@ function PostItem({ post, owner: owner = false, showAuthor, handleDelete } : { p
                 </Link>
                 <button 
                   onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(post.slug);
+                    handleDelete?.(post.slug); 
                   }}
                   className="text-sm text-red-500 flex items-center gap-1 hover:underline"
                 >
