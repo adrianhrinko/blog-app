@@ -16,7 +16,7 @@ interface Post {
 }
 
 // UI component for main post content
-export default function PostContent({ post, preview = false, path }: { post: any, preview?: boolean, path: string }) {
+export default function PostContent({ post, preview = false, path }: { post: any, preview?: boolean, path?: string }) {
   const createdAt = typeof post?.createdAt === 'number' ? new Date(post.createdAt) : post.createdAt?.toDate();
 
   return (

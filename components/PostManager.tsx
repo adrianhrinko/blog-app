@@ -2,7 +2,7 @@
 
 import { firestore } from '@/lib/firebase';
 import { doc, updateDoc, setDoc, Timestamp, deleteDoc } from 'firebase/firestore';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/providers/AuthContextProvider';
 import { Label } from '@/components/ui/label';
@@ -18,11 +18,14 @@ import kebabCase from 'lodash.kebabcase';
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 import DeleteDialog from './DeleteDialog';
+import { useNavigationGuard } from "next-navigation-guard";
+import { LeavingDialog } from "./LeavingDialog";
 
 export default function PostManager({ post, postRef, user }: { post?: any, postRef?: any, user: any}) {
   const [preview, setPreview] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const { username } = useAuth();
+  const isSaving = useRef(false);
   const { toast } = useToast();
   const router = useRouter();
   const { register, handleSubmit, reset, watch, formState: { errors, isDirty, isValid } } = useForm<FormData>({
@@ -30,7 +33,10 @@ export default function PostManager({ post, postRef, user }: { post?: any, postR
     defaultValues: post
   }); 
 
+  const navGuard = useNavigationGuard({ enabled: !isSaving.current && isDirty && isValid})
+
   const updatePost = async ({ title, subtitle, content, published }: FormData) => {
+    isSaving.current = true;
     if (!post) {
       // Create new post
       const slug = encodeURI(kebabCase(title));
@@ -120,6 +126,7 @@ export default function PostManager({ post, postRef, user }: { post?: any, postR
         </div>
       </form>
       <DeleteDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog} onConfirm={deletePost} />
+      <LeavingDialog isOpen={navGuard.active} yesCallback={navGuard.accept} noCallback={navGuard.reject} />
     </main>
   );
 }

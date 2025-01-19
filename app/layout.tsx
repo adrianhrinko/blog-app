@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import FirebaseAuthContextProvider from "@/providers/AuthContextProvider";
-
+import { NavigationGuardProvider } from "next-navigation-guard";
 export const metadata: Metadata = {
   title: "FEED",
 };
@@ -15,7 +15,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`}>
         <FirebaseAuthContextProvider>
-          {children}
+          <NavigationGuardProvider>
+            {children}
+          </NavigationGuardProvider>
         </FirebaseAuthContextProvider>
       </body>
     </html>
