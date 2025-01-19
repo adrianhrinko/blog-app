@@ -49,7 +49,6 @@ export default async function PostPage({
   const { username, slug } = await params;
   const { post, path } = await getData(username, slug);
 
-  console.log(post, path);
   return <PostPageContent initialPost={post} path={path} />;
 }
 

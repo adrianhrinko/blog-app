@@ -16,19 +16,12 @@ interface HeartProps {
 export default function HeartComponent({ postPath, heartCount }: HeartProps) {
   const { user } = useAuth();
 
-  // Add validation to ensure postPath is not empty
-  if (!postPath) {
-    console.error('Invalid postPath provided to HeartComponent');
-    return null;
-  }
-
   const postRef = doc(firestore, postPath);
   const heartRef = user?.uid ? doc(collection(postRef, 'hearts'), user.uid) : null;
   const [heartDoc] = useDocument(heartRef);
 
-  // Create a user-to-post relationship
   const addHeart = async () => {
-    if (!user?.uid) return;
+    if (!user?.uid || !postRef || !heartRef) return;
 
     const batch = writeBatch(firestore);
     batch.update(postRef, { heartCount: increment(1) });
@@ -38,7 +31,7 @@ export default function HeartComponent({ postPath, heartCount }: HeartProps) {
 
   // Remove a user-to-post relationship
   const removeHeart = async () => {
-    if (!user?.uid) return;
+    if (!user?.uid || !postRef || !heartRef) return;
 
     const batch = writeBatch(firestore);
     batch.update(postRef, { heartCount: increment(-1) });

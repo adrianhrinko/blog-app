@@ -28,7 +28,6 @@ export default function PostPageContent({
   
     const post = (realtimePost as Post) || initialPost;
 
-    console.log(post, path);
     return (
       <main className="max-w-2xl mx-auto p-4">
           <PostContent post={post} path={path}/>
