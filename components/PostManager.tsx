@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ImageUploader from '@/components/ImageUploader';
 import { EyeIcon, PencilIcon, SaveIcon, TrashIcon, GlobeIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -23,7 +23,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog"
 
@@ -35,12 +34,7 @@ export default function PostManager({ post, postRef, user }: { post?: any, postR
   const router = useRouter();
   const { register, handleSubmit, reset, watch, formState: { errors, isDirty, isValid } } = useForm<FormData>({
     mode: 'onChange',
-    defaultValues: post || {
-      title: '',
-      subtitle: '',
-      content: 'Tell your story...',
-      published: false
-    }
+    defaultValues: post
   }); 
 
   const updatePost = async ({ title, subtitle, content, published }: FormData) => {
@@ -177,7 +171,7 @@ function PostEditor({ register, errors }: PostEditorProps) {
                 minLength: { value: 3, message: 'Title must be at least 3 characters' },
                 maxLength: { value: 100, message: 'Title must be less than 100 characters' }
               })}
-              className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-2 border-0 focus:ring-0 p-0 h-auto"
+              className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-2 shadow-none border-0 focus:ring-0 focus:border-0 focus-visible:ring-0 focus-visible:outline-none p-0 h-auto placeholder:text-muted-foreground/50"
               placeholder="Post title"
             />
             {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
@@ -185,7 +179,7 @@ function PostEditor({ register, errors }: PostEditorProps) {
               {...register('subtitle', {
                 maxLength: { value: 200, message: 'Subtitle must be less than 200 characters' }
               })}
-              className="text-xl text-muted-foreground border-0 focus:ring-0 p-0 h-auto mt-2"
+              className="text-xl text-muted-foreground shadow-none border-0 focus:ring-0 focus:border-0 focus-visible:ring-0 focus-visible:outline-none p-0 h-auto mt-2 placeholder:text-muted-foreground/50"
               placeholder="Add a subtitle (optional)"
             />
             {errors.subtitle && <p className="text-red-500 text-sm">{errors.subtitle.message}</p>}
@@ -197,7 +191,7 @@ function PostEditor({ register, errors }: PostEditorProps) {
                 minLength: { value: 10, message: 'Content is too short' },
                 required: { value: true, message: 'Content is required' }
               })}
-              className="min-h-[842px] max-w-[595px] mx-auto bg-white shadow-none border-0 focus:ring-0 text-lg leading-relaxed px-12 py-8"
+              className="mx-auto bg-white shadow-none border-0 focus:ring-0 focus:border-0 focus-visible:ring-0 focus-visible:outline-none text-l p-0 placeholder:text-muted-foreground/50 resize-none"
               placeholder="Tell your story..."
             />
             {errors.content && <p className="text-red-500 text-center">{errors.content.message}</p>}
@@ -289,6 +283,37 @@ function Actions({ watch, register, preview, published, canSubmit, isNewPost, se
           Delete Post
         </Button>}
       </div>
+
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="text-sm font-medium">Editor Tips</CardTitle>
+          <p className="text-sm text-muted-foreground">Format your post with <a href="https://www.markdownguide.org/cheat-sheet/" className="underline hover:text-foreground" target="_blank" rel="noopener noreferrer">Markdown</a></p>
+        </CardHeader>
+        <CardContent>
+          <div className="text-sm text-muted-foreground space-y-2 opacity-75">
+            <div className="flex items-center gap-2">
+              <code className="bg-muted/50 px-1 rounded text-xs"># Title</code>
+              <span>→</span>
+              <span className="font-medium">Large Heading</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <code className="bg-muted/50 px-1 rounded text-xs">**text**</code>
+              <span>→</span>
+              <span className="font-bold">Bold Text</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <code className="bg-muted/50 px-1 rounded text-xs">*text*</code>
+              <span>→</span>
+              <span className="italic">Italic Text</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <code className="bg-muted/50 px-1 rounded text-xs">[Click](url)</code>
+              <span>→</span>
+              <span className="underline">Link</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </aside>
   );
 }

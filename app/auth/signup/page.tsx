@@ -9,14 +9,9 @@ export default function SignUpPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (user && username) {
-      router.push('/');
+    if (user) {
+      router.push(username ? '/manage' : '/auth/username');
     }
-
-    if (user && !username) {
-      router.push('/auth/username');
-    }
-
   }, [user, username, router]);
 
   return <SignUpForm />;

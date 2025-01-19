@@ -10,7 +10,7 @@ export default function UsernamePage() {
 
   useEffect(() => {
     if (user && username) {
-      router.push('/');
+      router.push('/manage');
     }
 
     if (!user) {

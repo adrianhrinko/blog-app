@@ -13,17 +13,20 @@ export default function PostFeed({ posts, owner, showAuthor = true} : { posts: a
       }
     }
   };
-  return posts ? posts.map((post: any) => <PostItem post={post} key={post.slug} owner={owner} showAuthor={showAuthor} handleDelete={handleDelete} />) : null;
-}
+
+  return posts ? posts.map((post: any) => (
+    <PostItem post={post} key={post.slug} owner={owner} showAuthor={showAuthor} handleDelete={handleDelete} />
+  )) : null;
+  }
 
 function PostItem({ post, owner: owner = false, showAuthor, handleDelete } : { post: any, owner: any, showAuthor: boolean, handleDelete: (slug: string) => void  }) {
-
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
 
   return (
-    <Link href={`/${post.username}/${post.slug}`}>
-      <article className="flex gap-6 py-6 border-b border-gray-100 hover:bg-gray-50">
+    <div className="relative">
+      <Link href={`/${post.username}/${post.slug}`} className="absolute inset-x-0 top-[5%] h-[90%] z-10 cursor-pointer" />
+      <article className="flex gap-6 py-6 border-b border-gray-100">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             {owner ? (
@@ -32,10 +35,10 @@ function PostItem({ post, owner: owner = false, showAuthor, handleDelete } : { p
               </span>
             ) : showAuthor && (
               <>
-                <Link href={`/${post.username}`}>
+                <Link href={`/${post.username}`} onClick={(e) => e.stopPropagation()} className="relative z-20">
                   <AvatarComponent user={post.user} username={post.username} className="h-6 w-6" />
                 </Link>
-                <Link href={`/${post.username}`}>
+                <Link href={`/${post.username}`} onClick={(e) => e.stopPropagation()} className="relative z-20">
                   <span className="text-sm font-medium">
                     <span className="text-muted-foreground">by</span>{' '}
                     <span className="hover:underline">@{post.username}</span>
@@ -59,7 +62,7 @@ function PostItem({ post, owner: owner = false, showAuthor, handleDelete } : { p
             </div>
 
             {owner && (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 relative z-20">
                 <Link href={`/manage/${post.slug}`} onClick={(e) => e.stopPropagation()}>
                   <button className="text-sm flex items-center gap-1 hover:underline">
                     <PencilIcon className="h-4 w-4" />
@@ -67,7 +70,10 @@ function PostItem({ post, owner: owner = false, showAuthor, handleDelete } : { p
                   </button>
                 </Link>
                 <button 
-                  onClick={() =>  handleDelete(post.slug)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(post.slug);
+                  }}
                   className="text-sm text-red-500 flex items-center gap-1 hover:underline"
                 >
                   <Trash2Icon className="h-4 w-4" />
@@ -88,6 +94,6 @@ function PostItem({ post, owner: owner = false, showAuthor, handleDelete } : { p
           </div>
         )}
       </article>
-    </Link>
+    </div>
   );
 }

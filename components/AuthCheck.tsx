@@ -1,11 +1,35 @@
 "use client"
 
 import { useAuth } from '@/providers/AuthContextProvider';
-import Link from 'next/link';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Spinner } from './Spinner';
 
-// Component's children only shown to logged-in users
-export default function AuthCheck(props: { children: React.ReactNode, fallback?: React.ReactNode }) {
-    const { username } = useAuth();
+export default function AuthCheck({ children }: { children: React.ReactNode }) {
+    const { user, username, loading } = useAuth();
+    const router = useRouter();
 
-  return username ? props.children : props.fallback || <Link href="/enter">You must be signed in</Link>;
+    useEffect(() => {
+      if (!loading) {
+        if (!user) {
+          router.push('/auth/signin');
+        } else if (!username) {
+          router.push('/auth/username');
+        }
+      }
+    }, [user, username, loading]);
+
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center min-h-screen">
+          <Spinner size={48} className="text-primary" />
+        </div>
+      );
+    }
+
+    if (user && username) {
+      return children;
+    }
+
+    return null;
 }

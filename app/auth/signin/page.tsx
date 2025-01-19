@@ -10,12 +10,8 @@ export default function SignInPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (user && username) {
-      router.push('/');
-    }
-
-    if (user && !username) {
-      router.push('/auth/username');
+    if (user) {
+      router.push(username ? '/manage' : '/auth/username');
     }
   }, [user, username, router]);
 

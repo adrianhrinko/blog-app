@@ -28,6 +28,5 @@ async function getPostsAsync() {
 export default async function HomePage() {
   const posts = await getPostsAsync();
 
-  console.log(posts);
   return <ClientPosts initialPosts={posts} />;
 }
