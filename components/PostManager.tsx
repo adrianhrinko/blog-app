@@ -17,14 +17,7 @@ import PostContent from '@/components/PostContent';
 import kebabCase from 'lodash.kebabcase';
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog"
+import DeleteDialog from './DeleteDialog';
 
 export default function PostManager({ post, postRef, user }: { post?: any, postRef?: any, user: any}) {
   const [preview, setPreview] = useState(false);
@@ -42,6 +35,7 @@ export default function PostManager({ post, postRef, user }: { post?: any, postR
       // Create new post
       const slug = encodeURI(kebabCase(title));
       const uid = user?.uid;
+      const userPhotoUrl = user?.photoURL;
       
       if (!uid || !username) return;
 
@@ -53,6 +47,7 @@ export default function PostManager({ post, postRef, user }: { post?: any, postR
         slug,
         uid,
         username,
+        userPhotoUrl,
         published,
         content,
         createdAt: Timestamp.now(),
@@ -124,25 +119,7 @@ export default function PostManager({ post, postRef, user }: { post?: any, postR
           />
         </div>
       </form>
-
-      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Are you sure you want to delete this post?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your post.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={deletePost}>
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DeleteDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog} onConfirm={deletePost} />
     </main>
   );
 }

@@ -38,7 +38,7 @@ export default function ManagePostsPage() {
     return (
       <main className="max-w-4xl mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Manage your Posts</h1>
-        <PostFeed posts={posts} owner handleDelete={handleDelete} />
+        <PostFeed posts={posts} showActions showAuthor={false} handleDelete={handleDelete} />
         <DeleteDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog} onConfirm={confirmDelete} />
       </main>
     );

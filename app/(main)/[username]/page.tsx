@@ -45,7 +45,7 @@ export default async function UserPage({
   return (
     <main className="max-w-4xl mx-auto p-4">
       <UserProfile user={user} />
-      <PostFeed posts={posts} owner={false} showAuthor={false} />  
+      <PostFeed posts={posts} showActions={false} showAuthor={false} />  
     </main>
   );
 }

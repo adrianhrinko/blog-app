@@ -30,7 +30,7 @@ export default function Page({ }) {
             </Link>
             <DropdownMenu>
                 <DropdownMenuTrigger>
-                    <AvatarComponent user={user} username={username}/>
+                    <AvatarComponent photoUrl={user?.photoURL ?? undefined} username={username}/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>@{username}</DropdownMenuLabel>

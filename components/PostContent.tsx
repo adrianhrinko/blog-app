@@ -28,7 +28,7 @@ export default function PostContent({ post, preview = false }: { post: any, prev
           <div className="flex items-center gap-2 text-muted-foreground">
             <div className="flex items-center gap-2">
               <Link href={`/${post.username}/`}>
-                <AvatarComponent user={post.user} username={post.username} className="h-10 w-10" />
+                <AvatarComponent photoUrl={post.user?.photoURL} username={post.username} className="h-10 w-10" />
               </Link>
               <Link href={`/${post.username}/`} className="font-medium text-black hover:underline">
                 @{post.username}
